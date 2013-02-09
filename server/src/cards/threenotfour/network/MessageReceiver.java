@@ -40,7 +40,7 @@ public class MessageReceiver implements Runnable {
 				do {
 					stringBuilder.append(request);
 					request = bufferedReader.readLine();
-				} while (!request.equals(""));
+				} while (request != null);
 
 				// Send it to process the request
 				processRequest(stringBuilder.toString(), clientSocket);

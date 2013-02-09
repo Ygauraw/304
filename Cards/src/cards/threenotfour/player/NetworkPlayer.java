@@ -1,28 +1,32 @@
 package cards.threenotfour.player;
 
+import java.net.InetAddress;
+
+import org.json.simple.JSONObject;
+
 import cards.threenotfour.Player;
 import cards.threenotfour.network.NetworkMessageSender;
 
 public class NetworkPlayer extends Player {
 
-	private final int port_number = 59000;
+	private final int port_number = 59422;
+	private InetAddress ip_address;
 
-	private NetworkMessageSender messageSender;
+	private static final NetworkMessageSender messageSender = new NetworkMessageSender();
 
-	// private NetworkMessageReceiver messageReceiver;
-
-	public NetworkPlayer() {
-
-		messageSender = new NetworkMessageSender();
-		// messageReceiver = new NetworkMessageReceiver(this);
-
-		// Need to implement a thread which will wait for incoming connections..
-		// TODO Auto-generated constructor stub
+	public NetworkPlayer(InetAddress address) {
+		ip_address = address;
 	}
 
 	public void displayCurrentCards() {
-		String message = "These are the cards.. I need to send this via INTERNET!";
-		messageSender.sendMeesage(message, port_number);
+		JSONObject object = new JSONObject();
+		object.put("req", "new_game");
+		sendMessage(object.toJSONString());
+	}
+
+	private void sendMessage(String message) {
+		System.out.println("Sending : " + message);
+		messageSender.sendMeesage(message, ip_address, port_number);
 
 	}
 }

@@ -2,6 +2,7 @@ package cards.threenotfour.network;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -12,7 +13,7 @@ import java.net.UnknownHostException;
  * @author sg3809
  * 
  */
-public class NetworkMessageSender {
+public final class NetworkMessageSender {
 
 	/**
 	 * Implements message passing (i.e Async send)
@@ -21,10 +22,10 @@ public class NetworkMessageSender {
 	 * @return
 	 */
 	// For now just tries to send the message.
-	public boolean sendMeesage(String message, int port_number) {
+	public synchronized static boolean sendMeesage(String message, InetAddress ip, int port_number) {
 		try {
 			// Create a new socket to connect to myself
-			Socket socket = new Socket("localhost", port_number);
+			Socket socket = new Socket(ip, port_number);
 
 			// Get the output stream of the socket
 			PrintStream out = new PrintStream(socket.getOutputStream());

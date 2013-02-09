@@ -2,8 +2,6 @@ package cards.threenotfour.network;
 
 import org.junit.Test;
 
-import cards.threenotfour.player.NetworkPlayer;
-
 public class SimpleNetworkTests {
 
 	@Test
@@ -16,8 +14,8 @@ public class SimpleNetworkTests {
 
 	@Test
 	public void simpleSendTest() {
-		NetworkPlayer p1 = new NetworkPlayer();
-		p1.displayCurrentCards();
+		// NetworkPlayer p1 = new NetworkPlayer();
+		// p1.displayCurrentCards();
 
 	}
 
