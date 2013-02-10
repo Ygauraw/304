@@ -19,7 +19,7 @@ import cards.threenotfour.player.NetworkPlayer;
 
 public class Test {
 
-	private static final int SAMPLE_PORT = 5800;
+	public static final int SERVER_PORT = 59422;
 	private static final int WAIT_TIME = 120;
 
 	public static void main(String[] args) throws UnknownHostException {
@@ -27,32 +27,31 @@ public class Test {
 		NetworkMessageReceiver receiver = new NetworkMessageReceiver();
 		new Thread(receiver).start();
 
-		InetAddress server = InetAddress.getByName("ghimire.tk");
+		InetAddress server = InetAddress.getByName("192.168.1.2");
 		NetworkPlayer p1 = new NetworkPlayer(server);
 		p1.displayCurrentCards();
 
 		try {
 			upnpTest();
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public static void upnpTest() throws SocketException, UnknownHostException, IOException,
 			SAXException, ParserConfigurationException, InterruptedException {
+
+		int a = 1;
+		if (a == 1)
+			return;
 		Logger logger = LogUtils.getLogger();
 		logger.info("Starting weupnp");
 
@@ -75,19 +74,19 @@ public class Test {
 		logger.log(Level.INFO, "External address: {0}", externalIPAddress);
 		PortMappingEntry portMapping = new PortMappingEntry();
 
-		logger.log(Level.INFO, "Attempting to map port {0}", SAMPLE_PORT);
+		logger.log(Level.INFO, "Attempting to map port {0}", SERVER_PORT);
 		logger.log(Level.INFO, "Querying device to see if mapping for port {0} already exists",
-				SAMPLE_PORT);
+				SERVER_PORT);
 
-		if (!d.getSpecificPortMappingEntry(SAMPLE_PORT, "TCP", portMapping)) {
+		if (!d.getSpecificPortMappingEntry(SERVER_PORT, "TCP", portMapping)) {
 			logger.info("Sending port mapping request");
 
-			if (d.addPortMapping(SAMPLE_PORT, SAMPLE_PORT, localAddress.getHostAddress(), "TCP", "test")) {
+			if (d.addPortMapping(SERVER_PORT, SERVER_PORT, localAddress.getHostAddress(), "TCP", "test")) {
 				logger.log(Level.INFO, "Mapping succesful: waiting {0} seconds before removing mapping.",
 						WAIT_TIME);
 
 				Thread.sleep(1000 * WAIT_TIME);
-				d.deletePortMapping(SAMPLE_PORT, "TCP");
+				d.deletePortMapping(SERVER_PORT, "TCP");
 
 				logger.info("Port mapping removed");
 				logger.info("Test SUCCESSFUL");

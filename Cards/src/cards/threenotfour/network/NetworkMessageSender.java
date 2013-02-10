@@ -23,6 +23,8 @@ public final class NetworkMessageSender {
 	 */
 	// For now just tries to send the message.
 	public synchronized static boolean sendMeesage(String message, InetAddress ip, int port_number) {
+
+		System.out.println("Sending message to :" + ip + " at port : " + port_number);
 		try {
 			// Create a new socket to connect to myself
 			Socket socket = new Socket(ip, port_number);

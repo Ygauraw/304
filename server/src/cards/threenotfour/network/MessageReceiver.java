@@ -23,6 +23,8 @@ public class MessageReceiver implements Runnable {
 	@Override
 	public void run() {
 
+		System.out.println("Starting a server at port: " + Controller.SERVER_PORT);
+
 		try {
 			// Open a server port to allow clients to send message
 			ServerSocket serverSocket = new ServerSocket(Controller.SERVER_PORT);
@@ -62,7 +64,7 @@ public class MessageReceiver implements Runnable {
 			String command = (String) object.get(Controller.REQUEST);
 
 			if (command != null && command.equals(Controller.NEW_GAME)) {
-				Controller.addPlayer(clientSocket.getInetAddress());
+				Controller.addPlayer(clientSocket);
 			}
 
 		} catch (ParseException e) {

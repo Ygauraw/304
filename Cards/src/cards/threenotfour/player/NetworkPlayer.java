@@ -6,10 +6,11 @@ import org.json.simple.JSONObject;
 
 import cards.threenotfour.Player;
 import cards.threenotfour.network.NetworkMessageSender;
+import cards.threenotfour.network.Test;
 
 public class NetworkPlayer extends Player {
 
-	private final int port_number = 5800;
+	private final int port_number = Test.SERVER_PORT;
 	private InetAddress ip_address;
 
 	private static final NetworkMessageSender messageSender = new NetworkMessageSender();
