@@ -22,7 +22,7 @@ public class NetworkMessageReceiver implements Runnable {
 	public void run() {
 
 		try {
-			ServerSocket serverSocket = new ServerSocket(59000);
+			ServerSocket serverSocket = new ServerSocket(5800);
 
 			Socket clientSocket = serverSocket.accept();
 

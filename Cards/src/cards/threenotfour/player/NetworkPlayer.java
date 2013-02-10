@@ -9,7 +9,7 @@ import cards.threenotfour.network.NetworkMessageSender;
 
 public class NetworkPlayer extends Player {
 
-	private final int port_number = 59422;
+	private final int port_number = 5800;
 	private InetAddress ip_address;
 
 	private static final NetworkMessageSender messageSender = new NetworkMessageSender();
