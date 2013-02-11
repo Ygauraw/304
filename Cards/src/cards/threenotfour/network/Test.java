@@ -27,7 +27,7 @@ public class Test {
 		NetworkMessageReceiver receiver = new NetworkMessageReceiver();
 		new Thread(receiver).start();
 
-		InetAddress server = InetAddress.getByName("192.168.1.2");
+		InetAddress server = InetAddress.getByName("129.31.216.104");
 		NetworkPlayer p1 = new NetworkPlayer(server);
 		p1.displayCurrentCards();
 

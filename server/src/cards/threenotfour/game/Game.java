@@ -1,6 +1,9 @@
 package cards.threenotfour.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.simple.parser.ParseException;
 
 /**
  * A class that represents a game that is waiting for more players.
@@ -29,7 +32,8 @@ public class Game {
 
 	public void addPlayer(Player player) {
 		players.add(player);
-		System.out.println("Added player with address " + player);
+		System.out.print("Added player with address " + player + ". ");
+		System.out.println("Total number of players : " + players.size());
 
 		is_full = players.size() >= number_of_players;
 	}
@@ -39,7 +43,15 @@ public class Game {
 	}
 
 	public void startGame() {
-
+		try {
+			// The host is the first client that created the game.
+			players.get(0).startGameAsHost();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

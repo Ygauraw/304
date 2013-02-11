@@ -1,10 +1,9 @@
 package cards.threenotfour.game;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Hashtable;
 
@@ -17,13 +16,13 @@ import cards.threenotfour.Controller;
 public class Player {
 
 	private BufferedReader bufferedReader;
-	private BufferedWriter bufferedWriter;
+	private PrintWriter printWriter;
 	private Socket socket;
 
 	public Player(Socket socket) throws IOException {
 		this.socket = socket;
 		bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+		printWriter = new PrintWriter(socket.getOutputStream());
 	}
 
 	/**
@@ -49,7 +48,12 @@ public class Player {
 		message.put(Controller.STATUS, Controller.START_AS_HOST);
 
 		JSONObject reply = new JSONObject(message);
-		bufferedWriter.write(reply.toJSONString());
+
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+
+		System.out.println("Sending :" + reply);
+		printWriter.write(reply.toString());
+		printWriter.flush();
 
 		while (true) {
 			String replyFromClient = bufferedReader.readLine();

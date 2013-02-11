@@ -37,15 +37,9 @@ public class MessageReceiver implements Runnable {
 
 				bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-				StringBuilder stringBuilder = new StringBuilder(100);
-				String request = "";
-				do {
-					stringBuilder.append(request);
-					request = bufferedReader.readLine();
-				} while (request != null);
-
+				String request = bufferedReader.readLine();
 				// Send it to process the request
-				processRequest(stringBuilder.toString(), clientSocket);
+				processRequest(request, clientSocket);
 
 			}
 
