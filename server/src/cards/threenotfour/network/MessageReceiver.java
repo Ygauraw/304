@@ -11,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import cards.threenotfour.Controller;
+import cards.threenotfour.constants.JSONConstant;
 
 /**
  * This guy just sits waiting for any data
@@ -38,6 +39,7 @@ public class MessageReceiver implements Runnable {
 				bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 				String request = bufferedReader.readLine();
+
 				// Send it to process the request
 				processRequest(request, clientSocket);
 
@@ -55,9 +57,9 @@ public class MessageReceiver implements Runnable {
 		try {
 			JSONObject object = (JSONObject) parser.parse(request);
 
-			String command = (String) object.get(Controller.REQUEST);
+			String command = (String) object.get(JSONConstant.REQUEST);
 
-			if (command != null && command.equals(Controller.NEW_GAME)) {
+			if (command != null && command.equals(JSONConstant.NEW_GAME)) {
 				Controller.addPlayer(clientSocket);
 			}
 

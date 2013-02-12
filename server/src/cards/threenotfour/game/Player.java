@@ -11,7 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import cards.threenotfour.Controller;
+import cards.threenotfour.constants.JSONConstant;
 
 public class Player {
 
@@ -45,7 +45,8 @@ public class Player {
 	 */
 	public void startGameAsHost() throws IOException, ParseException {
 		Hashtable<String, String> message = new Hashtable<String, String>();
-		message.put(Controller.STATUS, Controller.START_AS_HOST);
+		message.put(JSONConstant.STATUS, JSONConstant.OK);
+		message.put(JSONConstant.REQUEST, JSONConstant.START_AS_HOST);
 
 		JSONObject reply = new JSONObject(message);
 
@@ -61,9 +62,9 @@ public class Player {
 			JSONParser parser = new JSONParser();
 			JSONObject object = (JSONObject) parser.parse(replyFromClient);
 
-			String status = (String) object.get(Controller.STATUS);
+			String status = (String) object.get(JSONConstant.STATUS);
 
-			if (status.equals(Controller.OK)) {
+			if (status.equals(JSONConstant.OK)) {
 				socket.close();
 				return;
 			}

@@ -12,14 +12,6 @@ public class Controller {
 	public static final int CLIENT_PORT = 59423;
 	public static final int SERVER_PORT = 59422;
 
-	public static final String REQUEST = "req";
-	public static final String NEW_GAME = "new_game";
-	public static final String STATUS = "status";
-	public static final String WAIT = "wait";
-	public static final String START_GAME = "start_game";
-	public static final String START_AS_HOST = "start_game_host";
-	public static final String OK = "ok";
-
 	private static Game game;
 
 	public static void main(String[] args) {

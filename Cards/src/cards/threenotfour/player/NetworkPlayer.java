@@ -5,15 +5,14 @@ import java.net.InetAddress;
 import org.json.simple.JSONObject;
 
 import cards.threenotfour.Player;
-import cards.threenotfour.network.NetworkMessageSender;
-import cards.threenotfour.network.Test;
+import cards.threenotfour.network.Connection;
 
 public class NetworkPlayer extends Player {
 
-	private final int port_number = Test.SERVER_PORT;
+	private final int port_number = 110;
 	private InetAddress ip_address;
 
-	private static final NetworkMessageSender messageSender = new NetworkMessageSender();
+	private static final Connection messageSender = null; // new Connection();
 
 	public NetworkPlayer(InetAddress address) {
 		ip_address = address;
@@ -27,7 +26,7 @@ public class NetworkPlayer extends Player {
 
 	private void sendMessage(String message) {
 		System.out.println("Sending : " + message);
-		messageSender.sendMeesage(message, ip_address, port_number);
+		messageSender.sendMessage(message);
 
 	}
 }
