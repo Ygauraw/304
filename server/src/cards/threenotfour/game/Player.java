@@ -15,14 +15,14 @@ import cards.threenotfour.constants.JSONConstant;
 
 public class Player {
 
-	private BufferedReader bufferedReader;
-	private PrintWriter printWriter;
-	private Socket socket;
+	private final BufferedReader bufferedReader;
+	private final PrintWriter printWriter;
+	private final Socket socket;
 
 	public Player(Socket socket) throws IOException {
 		this.socket = socket;
 		bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		printWriter = new PrintWriter(socket.getOutputStream());
+		printWriter = new PrintWriter(socket.getOutputStream(), true);
 	}
 
 	/**
@@ -49,12 +49,7 @@ public class Player {
 		message.put(JSONConstant.REQUEST, JSONConstant.START_AS_HOST);
 
 		JSONObject reply = new JSONObject(message);
-
-		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-
-		System.out.println("Sending :" + reply);
-		printWriter.write(reply.toString());
-		printWriter.flush();
+		sendMessage(reply.toString());
 
 		while (true) {
 			String replyFromClient = bufferedReader.readLine();
@@ -73,6 +68,15 @@ public class Player {
 	}
 
 	/**
+	 * Takes a JSON encoded message and send it. This does not do any processing
+	 * on the message
+	 */
+	private void sendMessage(String message) {
+		System.out.println("Sending :" + message);
+		printWriter.println(message);
+	}
+
+	/**
 	 * Retuns the time it takes to send and receive a message. Used to find the
 	 * best host for the game.
 	 * 
@@ -85,5 +89,11 @@ public class Player {
 	@Override
 	public String toString() {
 		return socket.toString();
+	}
+
+	public void sendOk() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(JSONConstant.STATUS, JSONConstant.OK);
+		sendMessage(jsonObject.toString());
 	}
 }

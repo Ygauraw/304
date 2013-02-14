@@ -17,14 +17,14 @@ import java.net.UnknownHostException;
  */
 public class Connection {
 
-	private Socket socket;
-	private BufferedReader reader;
-	private PrintWriter writer;
+	private final Socket socket;
+	private final BufferedReader reader;
+	private final PrintWriter writer;
 
 	public Connection(InetAddress address, int port) throws IOException {
 		socket = new Socket(address, port);
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		writer = new PrintWriter(socket.getOutputStream());
+		writer = new PrintWriter(socket.getOutputStream(), true);
 	}
 
 	public Connection(String host, int port) throws UnknownHostException, IOException {
@@ -35,6 +35,7 @@ public class Connection {
 
 		try {
 			String message = reader.readLine();
+			System.out.println("Received: " + message);
 			return message;
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -55,7 +56,6 @@ public class Connection {
 
 		// Then put the message into the outputstream
 		writer.println(message);
-		writer.flush();
 	}
 
 	public void close() throws IOException {

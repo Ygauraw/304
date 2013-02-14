@@ -19,8 +19,8 @@ import cards.threenotfour.constants.JSONConstant;
  */
 public class MatchRequester {
 
-	private Connection serverConnection;
-	private JSONParser parser;
+	private final Connection serverConnection;
+	private final JSONParser parser;
 
 	public MatchRequester() throws UnknownHostException, IOException {
 		serverConnection = new ServerConnection();
@@ -39,12 +39,12 @@ public class MatchRequester {
 			String reply = serverConnection.receiveMessage();
 
 			JSONObject jsonReply = (JSONObject) parser.parse(reply);
-
 			if (jsonReply.get(JSONConstant.STATUS).equals(JSONConstant.OK)) {
-
 				String getReplyMessage = (String) jsonReply.get(JSONConstant.REQUEST);
 
-				if (getReplyMessage.equals(JSONConstant.START)) {
+				if (getReplyMessage == null) {
+					// The server just sent a ok message. Just sit still.
+				} else if (getReplyMessage != null && getReplyMessage.equals(JSONConstant.START)) {
 					System.out.println("I have been asked to start a game!!");
 					System.out.println(reply);
 					break;

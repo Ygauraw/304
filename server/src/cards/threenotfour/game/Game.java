@@ -16,9 +16,9 @@ public class Game {
 	private static final int DEFAULT_SIZE = 4;
 
 	// Each game will have 4 players.
-	private ArrayList<Player> players;
+	private final ArrayList<Player> players;
 	private boolean is_full;
-	private int number_of_players;
+	private final int number_of_players;
 
 	public Game() {
 		this(DEFAULT_SIZE);
@@ -34,6 +34,8 @@ public class Game {
 		players.add(player);
 		System.out.print("Added player with address " + player + ". ");
 		System.out.println("Total number of players : " + players.size());
+
+		player.sendOk();
 
 		is_full = players.size() >= number_of_players;
 	}
