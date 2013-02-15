@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
  */
 public class ServerConnection extends Connection {
 
-	public static final String SERVER_IP = "192.168.1.2";
+	public static final String SERVER_IP = "ghimire.tk";
 	public static final int SERVER_PORT = 59422;
 
 	public ServerConnection() throws UnknownHostException, IOException {

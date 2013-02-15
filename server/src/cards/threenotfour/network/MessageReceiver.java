@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 
 import cards.threenotfour.Controller;
 import cards.threenotfour.constants.JSONConstant;
+import cards.threenotfour.constants.NetworkConstants;
 
 /**
  * This guy just sits waiting for any data
@@ -24,11 +25,11 @@ public class MessageReceiver implements Runnable {
 	@Override
 	public void run() {
 
-		System.out.println("Starting a server at port: " + Controller.SERVER_PORT);
+		System.out.println("Starting a server at port: " + NetworkConstants.SERVER_PORT);
 
 		try {
 			// Open a server port to allow clients to send message
-			ServerSocket serverSocket = new ServerSocket(Controller.SERVER_PORT);
+			ServerSocket serverSocket = new ServerSocket(NetworkConstants.SERVER_PORT);
 			Socket clientSocket = null;
 			BufferedReader bufferedReader = null;
 
@@ -36,7 +37,8 @@ public class MessageReceiver implements Runnable {
 				// Accept connection from an incoming client
 				clientSocket = serverSocket.accept();
 
-				bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				bufferedReader = new BufferedReader(new InputStreamReader(
+						clientSocket.getInputStream()));
 
 				String request = bufferedReader.readLine();
 

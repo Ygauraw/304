@@ -1,6 +1,7 @@
 package cards.threenotfour.player;
 
 import java.net.InetAddress;
+import java.net.Socket;
 
 import org.json.simple.JSONObject;
 
@@ -16,6 +17,10 @@ public class NetworkPlayer extends Player {
 
 	public NetworkPlayer(InetAddress address) {
 		ip_address = address;
+	}
+
+	public NetworkPlayer(Socket socket) {
+
 	}
 
 	public void displayCurrentCards() {

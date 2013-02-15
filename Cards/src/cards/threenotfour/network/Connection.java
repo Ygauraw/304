@@ -8,6 +8,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.json.simple.JSONObject;
+
+import cards.threenotfour.constants.JSONConstant;
+
 /**
  * This class will use something like JSON to transfer content to another player
  * playing via the Internet.
@@ -23,6 +27,12 @@ public class Connection {
 
 	public Connection(InetAddress address, int port) throws IOException {
 		socket = new Socket(address, port);
+		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		writer = new PrintWriter(socket.getOutputStream(), true);
+	}
+
+	public Connection(Socket socket) throws IOException {
+		this.socket = socket;
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		writer = new PrintWriter(socket.getOutputStream(), true);
 	}
@@ -62,6 +72,12 @@ public class Connection {
 		writer.close();
 		reader.close();
 		socket.close();
+	}
+
+	public void sendOk() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(JSONConstant.STATUS, JSONConstant.OK);
+		sendMessage(jsonObject.toString());
 	}
 
 }

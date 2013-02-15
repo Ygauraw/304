@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -31,8 +32,15 @@ public class Player {
 	 * 
 	 * Need to pass the ip address of the client.
 	 */
-	public void startGame() {
+	public void startGame(String hostIP) {
+		Map<String, String> message = new Hashtable<String, String>();
+		message.put(JSONConstant.STATUS, JSONConstant.OK);
+		message.put(JSONConstant.REQUEST, JSONConstant.START);
+		message.put(JSONConstant.HOST, hostIP);
 
+		JSONObject jsonMessage = new JSONObject(message);
+
+		sendMessage(jsonMessage.toString());
 	}
 
 	/**
@@ -60,11 +68,17 @@ public class Player {
 			String status = (String) object.get(JSONConstant.STATUS);
 
 			if (status.equals(JSONConstant.OK)) {
-				socket.close();
+				close();
 				return;
 			}
 
 		}
+	}
+
+	private void close() throws IOException {
+		printWriter.close();
+		bufferedReader.close();
+		socket.close();
 	}
 
 	/**
@@ -95,5 +109,9 @@ public class Player {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(JSONConstant.STATUS, JSONConstant.OK);
 		sendMessage(jsonObject.toString());
+	}
+
+	public String getIPAddress() {
+		return socket.getInetAddress().toString();
 	}
 }

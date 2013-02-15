@@ -37,21 +37,52 @@ public class MatchRequester {
 		// Then wait for a reply
 		while (true) {
 			String reply = serverConnection.receiveMessage();
-
 			JSONObject jsonReply = (JSONObject) parser.parse(reply);
-			if (jsonReply.get(JSONConstant.STATUS).equals(JSONConstant.OK)) {
-				String getReplyMessage = (String) jsonReply.get(JSONConstant.REQUEST);
 
-				if (getReplyMessage == null) {
-					// The server just sent a ok message. Just sit still.
-				} else if (getReplyMessage != null && getReplyMessage.equals(JSONConstant.START)) {
-					System.out.println("I have been asked to start a game!!");
-					System.out.println(reply);
-					break;
-				}
+			if (processMessage(jsonReply)) {
+				break;
 			}
-
 		}
 
+		try {
+			closeConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+
+	private boolean processMessage(JSONObject jsonMessage) {
+		if (jsonMessage.get(JSONConstant.STATUS).equals(JSONConstant.OK)) {
+			String getReplyMessage = (String) jsonMessage.get(JSONConstant.REQUEST);
+
+			if (getReplyMessage == null) {
+				// The server just sent a ok message. Just sit still.
+			} else if (getReplyMessage.equals(JSONConstant.START_AS_HOST)) {
+				// Start the game as a host
+				createGame();
+				serverConnection.sendOk();
+				return true;
+			} else if (getReplyMessage.equals(JSONConstant.START)) {
+				// Start the game as a peer.
+				serverConnection.sendOk();
+			}
+		}
+		return false;
+	}
+
+	private void createGame() {
+		System.out.println("I have been asked to start a game!!");
+		GameHoster gameHoster = new GameHoster();
+
+	}
+
+	/**
+	 * Frees all the socket resources.
+	 * 
+	 * @throws IOException
+	 */
+	private void closeConnection() throws IOException {
+		serverConnection.close();
+	}
+
 }

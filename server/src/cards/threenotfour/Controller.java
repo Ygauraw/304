@@ -9,9 +9,6 @@ import cards.threenotfour.network.MessageReceiver;
 
 public class Controller {
 
-	public static final int CLIENT_PORT = 59423;
-	public static final int SERVER_PORT = 59422;
-
 	private static Game game;
 
 	public static void main(String[] args) {
