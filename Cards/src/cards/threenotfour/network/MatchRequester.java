@@ -22,12 +22,22 @@ public class MatchRequester {
 	private final Connection serverConnection;
 	private final JSONParser parser;
 
+	private String host_ip;
+
 	public MatchRequester() throws UnknownHostException, IOException {
 		serverConnection = new ServerConnection();
 		parser = new JSONParser();
+		host_ip = "";
 	}
 
-	public void getGame() throws ParseException {
+	/**
+	 * Sends messages to the match-maker to get a game.
+	 * 
+	 * @return True iff we are the host, else false
+	 * @throws ParseException
+	 * @throws IOException
+	 */
+	public boolean getGame() throws ParseException, IOException {
 
 		// Initially send a {"req":"new_game"} message a reply.
 		JSONObject object = new JSONObject();
@@ -39,19 +49,22 @@ public class MatchRequester {
 			String reply = serverConnection.receiveMessage();
 			JSONObject jsonReply = (JSONObject) parser.parse(reply);
 
-			if (processMessage(jsonReply)) {
-				break;
+			int id = processMessage(jsonReply);
+			if (id != 0) {
+				closeConnection();
+				return id == -1;
 			}
-		}
-
-		try {
-			closeConnection();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
-	private boolean processMessage(JSONObject jsonMessage) {
+	/**
+	 * Processes the messages received and takes appropriate actions.
+	 * 
+	 * @param jsonMessage
+	 * @return -1 to start as a host; 0 to continue receiving messages, 1 to
+	 *         start as a peer.
+	 */
+	private int processMessage(JSONObject jsonMessage) {
 		if (jsonMessage.get(JSONConstant.STATUS).equals(JSONConstant.OK)) {
 			String getReplyMessage = (String) jsonMessage.get(JSONConstant.REQUEST);
 
@@ -59,21 +72,16 @@ public class MatchRequester {
 				// The server just sent a ok message. Just sit still.
 			} else if (getReplyMessage.equals(JSONConstant.START_AS_HOST)) {
 				// Start the game as a host
-				createGame();
 				serverConnection.sendOk();
-				return true;
+				return -1;
 			} else if (getReplyMessage.equals(JSONConstant.START)) {
 				// Start the game as a peer.
+				host_ip = (String) jsonMessage.get(JSONConstant.HOST);
 				serverConnection.sendOk();
+				return 1;
 			}
 		}
-		return false;
-	}
-
-	private void createGame() {
-		System.out.println("I have been asked to start a game!!");
-		GameHoster gameHoster = new GameHoster();
-
+		return 0;
 	}
 
 	/**
@@ -83,6 +91,10 @@ public class MatchRequester {
 	 */
 	private void closeConnection() throws IOException {
 		serverConnection.close();
+	}
+
+	public String getHost_ip() {
+		return host_ip;
 	}
 
 }

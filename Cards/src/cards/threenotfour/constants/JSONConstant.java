@@ -21,7 +21,6 @@ public final class JSONConstant {
 	public static final String START_AS_HOST = "start_host";
 
 	public static final String HOST = "host";
-	public static final String HOSTNAME = "host_n";
 	public static final String PORT = "port";
 
 }

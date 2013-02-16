@@ -4,19 +4,20 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import cards.threenotfour.Player;
 import cards.threenotfour.constants.NetworkConstants;
 import cards.threenotfour.player.NetworkPlayer;
 
 public class GameHoster {
 
-	private final NetworkPlayer[] players;
+	private final Player[] players;
 
 	public GameHoster() {
-		players = new NetworkPlayer[3];
+		players = new Player[3];
+		players[0] = new Player();
 	}
 
 	public void startTask() {
-
 		System.out.println("Starting a server socket at port: " + NetworkConstants.CLIENT_PORT);
 
 		ServerSocket serverSocket;
@@ -37,5 +38,9 @@ public class GameHoster {
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
+	}
+
+	public Player[] getPlayers() {
+		return players;
 	}
 }

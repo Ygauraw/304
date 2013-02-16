@@ -29,9 +29,9 @@ public class NetworkPlayer extends Player {
 		sendMessage(object.toJSONString());
 	}
 
-	private void sendMessage(String message) {
+	@Override
+	public void sendMessage(String message) {
 		System.out.println("Sending : " + message);
 		messageSender.sendMessage(message);
-
 	}
 }

@@ -2,6 +2,8 @@ package cards.threenotfour.network;
 
 import java.net.UnknownHostException;
 
+import cards.threenotfour.NetworkCardGame;
+
 public class Test {
 
 	// private static final int WAIT_TIME = 120;
@@ -10,7 +12,15 @@ public class Test {
 
 		try {
 			MatchRequester matchRequester = new MatchRequester();
-			matchRequester.getGame();
+			boolean is_host = matchRequester.getGame();
+
+			if (is_host) {
+				NetworkCardGame game = createGame();
+				game.start();
+			} else {
+				joinGame(matchRequester.getHost_ip());
+			}
+
 		} catch (Exception e) {
 			System.err.println("Unable to get a game!");
 			System.err.println(e.getMessage());
@@ -18,10 +28,30 @@ public class Test {
 
 	}
 
+	private static NetworkCardGame createGame() {
+		System.out.println("I have been asked to start a game!!");
+
+		// Game hoster class will create a list of network players.
+		GameHoster gameHoster = new GameHoster();
+		gameHoster.startTask();
+
+		return new NetworkCardGame(gameHoster.getPlayers());
+	}
+
+	private static void joinGame(String host) {
+		System.out.println("I have been asked to join a game!!");
+		GameJoiner gameJoiner;
+		try {
+			gameJoiner = new GameJoiner(host);
+			gameJoiner.startTask();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+	}
 	/*
-	 * public static void upnpTest() throws SocketException, UnknownHostException,
-	 * IOException, SAXException, ParserConfigurationException,
-	 * InterruptedException {
+	 * public static void upnpTest() throws SocketException,
+	 * UnknownHostException, IOException, SAXException,
+	 * ParserConfigurationException, InterruptedException {
 	 * 
 	 * int a = 1; if (a == 1) return; Logger logger = LogUtils.getLogger();
 	 * logger.info("Starting weupnp");
@@ -30,14 +60,16 @@ public class Test {
 	 * logger.info("Looking for Gateway Devices"); discover.discover();
 	 * GatewayDevice d = discover.getValidGateway();
 	 * 
-	 * if (null != d) { logger.log(Level.INFO, "Gateway device found.\n{0} ({1})",
-	 * new Object[] { d.getModelName(), d.getModelDescription() }); } else {
+	 * if (null != d) { logger.log(Level.INFO,
+	 * "Gateway device found.\n{0} ({1})", new Object[] { d.getModelName(),
+	 * d.getModelDescription() }); } else {
 	 * logger.info("No valid gateway device found."); return; }
 	 * 
 	 * InetAddress localAddress = d.getLocalAddress(); logger.log(Level.INFO,
 	 * "Using local address: {0}", localAddress); String externalIPAddress =
 	 * d.getExternalIPAddress(); logger.log(Level.INFO, "External address: {0}",
-	 * externalIPAddress); PortMappingEntry portMapping = new PortMappingEntry();
+	 * externalIPAddress); PortMappingEntry portMapping = new
+	 * PortMappingEntry();
 	 * 
 	 * logger.log(Level.INFO, "Attempting to map port {0}", SERVER_PORT);
 	 * logger.log(Level.INFO,
@@ -54,8 +86,9 @@ public class Test {
 	 * 
 	 * Thread.sleep(1000 * WAIT_TIME); d.deletePortMapping(SERVER_PORT, "TCP");
 	 * 
-	 * logger.info("Port mapping removed"); logger.info("Test SUCCESSFUL"); } else
-	 * { logger.info("Port mapping removal failed"); logger.info("Test FAILED"); }
+	 * logger.info("Port mapping removed"); logger.info("Test SUCCESSFUL"); }
+	 * else { logger.info("Port mapping removal failed");
+	 * logger.info("Test FAILED"); }
 	 * 
 	 * } else { logger.info("Port was already mapped. Aborting test."); }
 	 * 
