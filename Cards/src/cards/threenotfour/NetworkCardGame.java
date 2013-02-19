@@ -32,16 +32,17 @@ public class NetworkCardGame {
 
 			for (int i = 0; i < numHands; i++) {
 				players[i].dealtFirstRound(deal(deck, cardsPerHand));
-				System.out.println("Hand of p" + i + ": " + players[i].getHand());
+				sayToPlayer(players[i], "Hand of p" + i + ": " + players[i].getHand());
 			}
 
 			getBid();
-			System.out.println("Bid is " + bid);
-			System.out.println("Trump card is: " + trumpCard);
+			sayToAll("Bid is " + bid);
+
+			// System.out.println("Trump card is: " + trumpCard);
 
 			for (int i = 0; i < numHands; i++) {
 				players[i].dealtSecondRound(deal(deck, cardsPerHand));
-				System.out.println("Hand of p" + i + ": " + players[i].getHand());
+				sayToPlayer(players[i], "Hand of p" + i + ": " + players[i].getHand());
 			}
 			team1 += 5; // Temporary
 			trumpPlayer = (trumpPlayer + 1) % 4;

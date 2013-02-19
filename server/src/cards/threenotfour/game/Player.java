@@ -112,6 +112,6 @@ public class Player {
 	}
 
 	public String getIPAddress() {
-		return socket.getInetAddress().toString();
+		return socket.getInetAddress().getHostAddress();
 	}
 }

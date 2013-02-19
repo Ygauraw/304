@@ -23,4 +23,8 @@ public final class JSONConstant {
 	public static final String HOST = "host";
 	public static final String PORT = "port";
 
+	public static final String YOUR_CARDS = "your_card";
+	public static final String TABLE_CARDS = "table_card";
+	public static final String CONTENT = "content";
+
 }

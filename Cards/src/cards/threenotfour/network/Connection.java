@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import org.json.simple.JSONObject;
 
 import cards.threenotfour.constants.JSONConstant;
+import cards.threenotfour.log.Log;
 
 /**
  * This class will use something like JSON to transfer content to another player
@@ -45,10 +46,10 @@ public class Connection {
 
 		try {
 			String message = reader.readLine();
-			System.out.println("Received: " + message);
+			Log.d("Received: " + message);
 			return message;
 		} catch (IOException e) {
-			System.err.println(e.getMessage());
+			Log.e(e.getMessage());
 		}
 		return "";
 	}
@@ -61,10 +62,9 @@ public class Connection {
 	 */
 	// For now just tries to send the message.
 	public synchronized void sendMessage(String message) {
+		Log.d("Sending: " + message + " to :" + socket.getInetAddress());
 
-		System.out.println("Sending message" + message + " to :" + socket.getInetAddress());
-
-		// Then put the message into the outputstream
+		// Then put the message into the output-stream
 		writer.println(message);
 	}
 

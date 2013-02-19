@@ -6,6 +6,7 @@ import java.net.Socket;
 
 import cards.threenotfour.Player;
 import cards.threenotfour.constants.NetworkConstants;
+import cards.threenotfour.log.Log;
 import cards.threenotfour.player.NetworkPlayer;
 
 public class GameHoster {
@@ -13,20 +14,20 @@ public class GameHoster {
 	private final Player[] players;
 
 	public GameHoster() {
-		players = new Player[3];
+		players = new Player[4];
 		players[0] = new Player();
 	}
 
 	public void startTask() {
-		System.out.println("Starting a server socket at port: " + NetworkConstants.CLIENT_PORT);
+		Log.d("Starting a server socket at port: " + NetworkConstants.CLIENT_PORT);
 
 		ServerSocket serverSocket;
 		try {
 			serverSocket = new ServerSocket(NetworkConstants.CLIENT_PORT);
 
 			Socket clientSocket = null;
-			int i = 0;
-			while (i < 3) {
+			int i = 1;
+			while (i < 4) {
 				clientSocket = serverSocket.accept();
 
 				if (clientSocket != null) {
