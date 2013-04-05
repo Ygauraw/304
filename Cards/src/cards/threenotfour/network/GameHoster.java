@@ -1,6 +1,7 @@
 package cards.threenotfour.network;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -15,7 +16,7 @@ public class GameHoster {
 
 	public GameHoster() {
 		players = new Player[4];
-		players[0] = new Player();
+		players[0] = new Player(0);
 	}
 
 	public void startTask() {
@@ -24,14 +25,16 @@ public class GameHoster {
 		ServerSocket serverSocket;
 		try {
 			serverSocket = new ServerSocket(NetworkConstants.CLIENT_PORT);
-
+			
+			//players[0] = new NetworkPlayer(new Socket(InetAddress.getByName("localhost"), NetworkConstants.CLIENT_PORT));
+			
 			Socket clientSocket = null;
 			int i = 1;
 			while (i < 4) {
 				clientSocket = serverSocket.accept();
 
 				if (clientSocket != null) {
-					players[i] = new NetworkPlayer(clientSocket);
+					players[i] = new NetworkPlayer(clientSocket, i);
 					++i;
 				}
 			}

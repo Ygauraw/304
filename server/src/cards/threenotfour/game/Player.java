@@ -17,12 +17,14 @@ import cards.threenotfour.constants.JSONConstant;
 public class Player {
 
 	private final BufferedReader bufferedReader;
+	private final BufferedReader playerinput;
 	private final PrintWriter printWriter;
 	private final Socket socket;
 
 	public Player(Socket socket) throws IOException {
 		this.socket = socket;
 		bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		playerinput = new BufferedReader(new InputStreamReader(System.in));
 		printWriter = new PrintWriter(socket.getOutputStream(), true);
 	}
 
@@ -103,6 +105,27 @@ public class Player {
 	@Override
 	public String toString() {
 		return socket.toString();
+	}
+	
+	public int readInt(){
+		try {
+			return Integer.parseInt(playerinput.readLine());
+		} catch (NumberFormatException e) {
+			System.out.println("Non number input!");
+			e.printStackTrace();
+			return 0;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("IOException");
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public void requestBid(){
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(JSONConstant.REQUEST, "bid");
+		sendMessage(jsonObject.toString());
 	}
 
 	public void sendOk() {

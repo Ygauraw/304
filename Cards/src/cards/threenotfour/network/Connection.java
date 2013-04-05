@@ -27,6 +27,7 @@ public class Connection {
 	private final PrintWriter writer;
 
 	public Connection(InetAddress address, int port) throws IOException {
+		//System.out.println("Entered Connection constructor");
 		socket = new Socket(address, port);
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		writer = new PrintWriter(socket.getOutputStream(), true);
@@ -34,6 +35,8 @@ public class Connection {
 
 	public Connection(Socket socket) throws IOException {
 		this.socket = socket;
+		System.out.println("New socket established");
+		System.out.println("Socket inet address is: " + socket.getInetAddress());
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		writer = new PrintWriter(socket.getOutputStream(), true);
 	}
@@ -46,8 +49,10 @@ public class Connection {
 
 		try {
 			String message = reader.readLine();
-			Log.d("Received: " + message);
-			return message;
+			if(message != null){
+				Log.d("Received: " + message);
+				return message;
+			}
 		} catch (IOException e) {
 			Log.e(e.getMessage());
 		}
@@ -78,6 +83,10 @@ public class Connection {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(JSONConstant.STATUS, JSONConstant.OK);
 		sendMessage(jsonObject.toString());
+	}
+	
+	public Socket getSocket(){
+		return socket;
 	}
 
 }

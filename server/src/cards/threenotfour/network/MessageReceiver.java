@@ -32,8 +32,10 @@ public class MessageReceiver implements Runnable {
 			ServerSocket serverSocket = new ServerSocket(NetworkConstants.SERVER_PORT);
 			Socket clientSocket = null;
 			BufferedReader bufferedReader = null;
+			System.out.println("Tyring to establish socket!");
 
 			while (true) {
+				System.out.println("In while!");
 				// Accept connection from an incoming client
 				clientSocket = serverSocket.accept();
 
@@ -48,12 +50,14 @@ public class MessageReceiver implements Runnable {
 			}
 
 		} catch (IOException e) {
+			System.out.println("Caught IO exception");
 			e.printStackTrace();
 		}
 
 	}
 
 	public void processRequest(String request, Socket clientSocket) {
+		System.out.println("Processing received request");
 		JSONParser parser = new JSONParser();
 
 		try {

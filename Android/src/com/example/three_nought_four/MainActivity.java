@@ -1,5 +1,10 @@
 package com.example.three_nought_four;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
+import org.json.simple.JSONObject;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -10,6 +15,10 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		Connection exampleConn = new Connection("149.241.1.160", 59422);
+		JSONObject object = new JSONObject();
+		object.put("req", "new_game");
+		exampleConn.sendMessage(object.toJSONString());
 	}
 
 	@Override

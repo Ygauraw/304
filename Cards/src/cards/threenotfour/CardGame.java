@@ -23,7 +23,7 @@ public class CardGame {
 		trumpPlayer = 0;
 		players = new Player[4];
 		for(int i=0; i<players.length; i++){
-			players[i] = new Player();
+			players[i] = new Player(i);
 		}
 		scanner = new Scanner(new BufferedInputStream(System.in));
 

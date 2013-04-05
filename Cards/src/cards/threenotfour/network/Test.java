@@ -15,6 +15,7 @@ public class Test {
 		Log.setLevel(1);
 
 		try {
+			//System.out.println("Entered try!");
 			MatchRequester matchRequester = new MatchRequester();
 			boolean is_host = matchRequester.getGame();
 
@@ -25,6 +26,7 @@ public class Test {
 				joinGame(matchRequester.getHost_ip());
 			}
 		} catch (Exception e) {
+			System.out.println("Entered catch");
 			Log.e("Unable to get a game!");
 			Log.e(e.getMessage());
 		}

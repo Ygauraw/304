@@ -4,9 +4,15 @@ import java.util.ArrayList;
 
 public class Player {
 	private ArrayList<Card> hand;
+	private int index;
 
-	public Player() {
+	public Player(int index) {
 		hand = null;
+		this.index = index;
+	}
+	
+	public int getIndex(){
+		return index;
 	}
 
 	public Card playCard(int index) {
@@ -29,5 +35,14 @@ public class Player {
 
 	public void sendMessage(String message) {
 		System.out.println(message);
+	}
+	
+	public String receiveMessage(){
+		return "";
+	}
+
+	public void readInt() {
+		// TODO Auto-generated method stub
+		
 	}
 }
