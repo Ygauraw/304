@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import org.json.simple.JSONObject;
 
@@ -14,10 +12,9 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.StrictMode;
 
-
 /**
- * This class will use something like JSON to transfer content to another player
- * playing via the Internet.
+ * This class will use something like JSON to transfer content to another player playing via the
+ * Internet.
  * 
  * @author sg3809
  * 
@@ -30,9 +27,8 @@ public class Connection {
 	private PrintWriter writer;
 	StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
-
-	public Connection(String string, int port){
-		StrictMode.setThreadPolicy(policy); 
+	public Connection(String string, int port) {
+		StrictMode.setThreadPolicy(policy);
 		System.out.println("Entered Connection constructor");
 		try {
 			socket = new Socket(string, port);
@@ -50,18 +46,18 @@ public class Connection {
 		} catch (IOException e) {
 			System.out.println("IOException caught kld");
 			System.out.println(e);
-		} catch (Exception f){
+		} catch (Exception f) {
 			System.out.println("Caught exception kld");
 			System.out.println(f);
 		}
-		
+
 	}
 
 	public synchronized String receiveMessage() {
 
 		try {
 			String message = reader.readLine();
-			if(message != null){
+			if (message != null) {
 				System.out.println("Received: " + message);
 				return message;
 			}
@@ -97,8 +93,8 @@ public class Connection {
 		jsonObject.put("st", "ok");
 		sendMessage(jsonObject.toString());
 	}
-	
-	public Socket getSocket(){
+
+	public Socket getSocket() {
 		return socket;
 	}
 

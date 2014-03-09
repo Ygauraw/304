@@ -4,5 +4,8 @@
     <string name="app_name">304</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="solitaire_layout_text_text"></string>
+    <string name="help_text">No help</string>
+    <string name="win_text">You won!</string>
 
 </resources>

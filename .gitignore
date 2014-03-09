@@ -1,1 +1,3 @@
 *.class
+Android/.settings
+Android/bin

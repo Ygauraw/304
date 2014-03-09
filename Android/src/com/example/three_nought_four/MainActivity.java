@@ -1,31 +1,201 @@
+/*
+  Copyright 2008 Google Inc.
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ */
 package com.example.three_nought_four;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-
-import org.json.simple.JSONObject;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Window;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
+import android.widget.TextView;
 
+// Base activity class.
 public class MainActivity extends Activity {
+	private static final int MENU_NEW_GAME = 1;
+	private static final int MENU_RESTART = 2;
+	private static final int MENU_OPTIONS = 3;
+	private static final int MENU_SAVE_QUIT = 4;
+	private static final int MENU_QUIT = 5;
+	private static final int MENU_SOLITAIRE = 6;
+	private static final int MENU_SPIDER = 7;
+	private static final int MENU_FREECELL = 8;
+	private static final int MENU_FORTYTHIEVES = 9;
+	private static final int MENU_STATS = 10;
+	private static final int MENU_HELP = 11;
+
+	// View extracted from main.xml.
+	private View mMainView;
+	private SolitaireView mSolitaireView;
+	private SharedPreferences mSettings;
+
+	private boolean mDoSave;
+
+	// Shared preferences are where the various user settings are stored.
+	public SharedPreferences GetSettings() {
+		return mSettings;
+	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		Connection exampleConn = new Connection("149.241.1.160", 59422);
-		JSONObject object = new JSONObject();
-		object.put("req", "new_game");
-		exampleConn.sendMessage(object.toJSONString());
+		mDoSave = true;
+
+		// Force landscape and no title for extra room
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		// If the user has never accepted the EULA show it again.
+		mSettings = getSharedPreferences("SolitairePreferences", 0);
+		setContentView(R.layout.main);
+		mMainView = findViewById(R.id.main_view);
+		mSolitaireView = (SolitaireView) findViewById(R.id.solitaire);
+		mSolitaireView.SetTextView((TextView) findViewById(R.id.text));
+
+		// StartSolitaire(savedInstanceState);
+	}
+
+	// Entry point for starting the game.
+	// public void StartSolitaire(Bundle savedInstanceState) {
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (mSettings.getBoolean("SolitaireSaveValid", false)) {
+			SharedPreferences.Editor editor = GetSettings().edit();
+			editor.putBoolean("SolitaireSaveValid", false);
+			editor.commit();
+			// If save is corrupt, just start a new game.
+			if (mSolitaireView.LoadSave()) {
+				HelpSplashScreen();
+				return;
+			}
+		}
+
+		mSolitaireView.InitGame(mSettings.getInt("LastType", Rules.SOLITAIRE));
+		HelpSplashScreen();
+	}
+
+	// Force show the help if this is the first time played. Sadly no one reads
+	// it anyways.
+	private void HelpSplashScreen() {
+		if (!mSettings.getBoolean("PlayedBefore", false)) {
+			mSolitaireView.DisplayHelp();
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		super.onCreateOptionsMenu(menu);
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case MENU_SOLITAIRE:
+			mSolitaireView.InitGame(Rules.SOLITAIRE);
+			break;
+		case MENU_SPIDER:
+			mSolitaireView.InitGame(Rules.SPIDER);
+			break;
+		case MENU_FREECELL:
+			mSolitaireView.InitGame(Rules.FREECELL);
+			break;
+		case MENU_FORTYTHIEVES:
+			mSolitaireView.InitGame(Rules.FORTYTHIEVES);
+			break;
+		case MENU_RESTART:
+			mSolitaireView.RestartGame();
+			break;
+		case MENU_STATS:
+			DisplayStats();
+			break;
+		case MENU_OPTIONS:
+			DisplayOptions();
+			break;
+		case MENU_HELP:
+			mSolitaireView.DisplayHelp();
+			break;
+		case MENU_SAVE_QUIT:
+			mSolitaireView.SaveGame();
+			mDoSave = false;
+			finish();
+			break;
+		case MENU_QUIT:
+			mDoSave = false;
+			finish();
+			break;
+		}
+
+		return false;
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mSolitaireView.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if (mDoSave) {
+			mSolitaireView.SaveGame();
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mSolitaireView.onResume();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+
+	public void DisplayOptions() {
+		mSolitaireView.SetTimePassing(false);
+		// TODO: No options
+	}
+
+	public void DisplayStats() {
+		mSolitaireView.SetTimePassing(false);
+		// TODO: No Stats
+	}
+
+	public void CancelOptions() {
+		setContentView(mMainView);
+		mSolitaireView.requestFocus();
+		mSolitaireView.SetTimePassing(true);
+	}
+
+	public void NewOptions() {
+		setContentView(mMainView);
+		mSolitaireView.InitGame(mSettings.getInt("LastType", Rules.SOLITAIRE));
+	}
+
+	// This is called for option changes that require a refresh, but not a new game
+	public void RefreshOptions() {
+		setContentView(mMainView);
+		mSolitaireView.RefreshOptions();
+	}
 }
